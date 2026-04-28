@@ -2,6 +2,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "constants.hpp"
+#include "sphere.hpp"
+
 int main() {
     if (!glfwInit()) {
         return -1;
@@ -20,6 +23,9 @@ int main() {
     if (glewInit() != GLEW_OK) {
         return -1;
     }
+
+    Sphere test = Sphere(2, 3, 4, 5);
+    std::cout << test << "\n";
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT); 
