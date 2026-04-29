@@ -12,7 +12,7 @@ int main() {
 
     glfwWindowHint(GLFW_STENCIL_BITS, 8);
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Minecraft Clone", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Space Simulator", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
