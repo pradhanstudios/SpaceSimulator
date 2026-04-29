@@ -1,5 +1,5 @@
 #pragma once
-#include "constants.hpp"
+#include "globals.hpp"
 
 class Window {
 public:

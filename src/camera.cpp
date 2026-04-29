@@ -7,7 +7,7 @@ Camera::Camera(glm::vec3 position, float fov, float yaw, float pitch, float sens
     m_pitch = pitch;
     m_sensitivity = sensitivity;
     m_zoom = zoom;
-    m_projection = glm::perspective(glm::radians(m_fov), float(WIN_WIDTH) / float(WIN_HEIGHT), 0.1f, 100.f);
+    m_projection = glm::perspective(glm::radians(m_fov), float(defaultWidth) / float(defaultHeight), 0.1f, 100.f);
     updateVectors();
     updateView();
     std::cout << "Camera initialized" << std::endl;
