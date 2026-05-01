@@ -1,29 +1,18 @@
 #pragma once
 
 #include "globals.hpp"
-
-/**
- * Variables
- * 
- * position
- * size (radius)
- * 
- * opt: color
- */
+#include "mesh.hpp"
 
 class Sphere {
 private:
-    glm::vec3 pos;
-    double r; // radius
+    unsigned int m_lats;
+    unsigned int m_longs;
+    Mesh* m_mesh;
 
 public:
-    Sphere(glm::vec3 pos, double r);
-    Sphere(double x, double y, double z, double r);
+    Sphere(float r = 1.f, unsigned int lats = 64, unsigned int longs = 64);
+    ~Sphere() { free(m_mesh); };
 
-
-    friend std::ostream& operator<<(std::ostream& os, const Sphere& s) {
-        os << "Pos: (" << s.pos.x << ", " << s.pos.y << ", " << s.pos.z << "); Size: " << s.r;
-        return os;
-    }
-
+    void Draw();
+    void DrawInstanced(unsigned int count);
 };

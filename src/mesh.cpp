@@ -2,9 +2,33 @@
 #include <iostream>
 
 // Constructor
-Mesh::Mesh(const float* vertices, size_t numVertices, const uint* indices, size_t numIndices)
-	: m_VAO(0), m_VBO(0), m_EBO(0), m_vertexCount(numVertices / 3), m_indexCount(numIndices) {
+Mesh::Mesh(const float* vertices, size_t numVertices, const uint* indices, size_t numIndices){
+	init(vertices, numVertices, indices, numIndices);
+}
 
+// Destructor
+Mesh::~Mesh() {
+	if (m_VAO != 0) {
+		glDeleteVertexArrays(1, &m_VAO);
+	}
+    
+	if (m_VBO != 0) {
+		glDeleteBuffers(1, &m_VBO);
+	}
+
+    if (m_EBO != 0) {
+        glDeleteBuffers(1, &m_EBO);
+    }
+
+	std::cout << "Mesh VAO, VBO, (if present) EBO deleted." << std::endl;
+}
+
+void Mesh::init(const float* vertices, size_t numVertices, const uint* indices, size_t numIndices) {
+	m_VAO = 0;
+	m_VBO = 0;
+	m_EBO = 0;
+	m_vertexCount = numVertices / 3; // Assuming 3 components per vertex (x, y, z)
+	m_indexCount = numIndices;
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &m_VBO);
     if (indices)
@@ -29,23 +53,6 @@ Mesh::Mesh(const float* vertices, size_t numVertices, const uint* indices, size_
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	std::cout << "Mesh created with VAO: " << m_VAO << ", VBO: " << m_VBO << ", EBO: " << m_EBO << std::endl;
-}
-
-// Destructor
-Mesh::~Mesh() {
-	if (m_VAO != 0) {
-		glDeleteVertexArrays(1, &m_VAO);
-	}
-    
-	if (m_VBO != 0) {
-		glDeleteBuffers(1, &m_VBO);
-	}
-
-    if (m_EBO != 0) {
-        glDeleteBuffers(1, &m_EBO);
-    }
-
-	std::cout << "Mesh VAO, VBO, (if present) EBO deleted." << std::endl;
 }
 
 void Mesh::bind() const {

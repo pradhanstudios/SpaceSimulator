@@ -9,6 +9,7 @@ public:
 	Mesh(const float* vertices, size_t numVertices, const uint* indices=nullptr, size_t numIndices=0);
 	~Mesh();
 
+	void init(const float* vertices, size_t numVertices, const uint* indices=nullptr, size_t numIndices=0);
 	void bind() const;
 	void unbind() const;
 
