@@ -1,5 +1,6 @@
 #pragma once
 
+#include "globals.hpp"
 #include "mesh.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
