@@ -3,13 +3,25 @@
 
 // Constructor
 Sim::Sim(int fps)
-	: m_fps(fps) {
+	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps) {
 	init();
 	std::cout << "Sim initialized." << std::endl;
 }
 
 // Destructor
 Sim::~Sim() {
+    if (m_shader) {
+		delete m_shader;
+		m_shader = nullptr;
+	}
+	if (m_renderer) {
+		delete m_renderer;
+		m_renderer = nullptr;
+	}
+	if (m_window) {
+		delete m_window;
+		m_window = nullptr;
+	}
     if (m_camera) {
         delete m_camera;
         m_camera = nullptr;
@@ -19,12 +31,20 @@ Sim::~Sim() {
 
 void Sim::init() {
 	m_window = new Window(defaultWidth, defaultHeight, "Space Simulation");
+	m_renderer = new Renderer();
+	m_shader = new Shader(vertexShaderPath, fragmentShaderPath);
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
     glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(m_window->getGLFWwindow(), mouseCallback);
+
+	if (m_shader->getID() == 0) {
+		std::cerr << "ERROR: Shader program failed to create. Exiting." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	std::cout << "Sim initialization complete." << std::endl;
 }
 
@@ -91,4 +111,8 @@ void Sim::update() {
     m_camera->updateView();
 }
 
-void Sim::render() {}
+void Sim::render() {
+	m_renderer->clear();
+
+	// m_renderer->draw(*m_chunk->getMesh(), *m_shader, *m_camera);
+}

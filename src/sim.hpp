@@ -1,6 +1,8 @@
 #pragma once
 
-#include "globals.hpp"
+#include "mesh.hpp"
+#include "renderer.hpp"
+#include "shader.hpp"
 #include "window.hpp"
 #include "camera.hpp"
 #include "deltaTime.hpp"
@@ -18,10 +20,13 @@ public:
 
 private:
 	Window* m_window;   // Pointer to the Window object
+	Renderer* m_renderer; // Pointer to the Renderer object
+	Shader* m_shader;   // Pointer to the Shader object
+	// Mesh* m_cubeMesh; // Pointer to the Mesh object for the triangle
     Camera* m_camera;
     double m_mousePosX;
     double m_mousePosY;
-    int m_fps;
+    uint m_fps;
 
 	// Private helper function to initialize all components
 	void init();
