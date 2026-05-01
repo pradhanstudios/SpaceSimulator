@@ -2,6 +2,7 @@
 
 Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
     : m_lats(lats), m_longs(longs) {
+    m_mesh = new Mesh();
     std::vector<float> buffer;
     static const int STRIDE_SIZE = 11; // 3 for vertex, 3 for normal, 2 for texture coordinates, 3 for tangent
     static const int STEP_SIZE = 2 * STRIDE_SIZE; // 2 vertices at once

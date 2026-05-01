@@ -32,7 +32,7 @@ void Mesh::init(const float* vertices, size_t numVertices, const uint* indices, 
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &m_VBO);
     if (indices)
-        glGenBuffers(1, &m_EBO);
+        glGenBuffers(1, &m_EBO);	
 
 	glBindVertexArray(m_VAO);
 
