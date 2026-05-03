@@ -8,7 +8,7 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
     static const int STEP_SIZE = 2 * STRIDE_SIZE; // 2 vertices at once
 
     unsigned int length = (lats + 1) * (longs + 1) * STEP_SIZE;
-    buffer.resize(length); 
+    buffer.resize(length);
 
     for (size_t i = 0; i < lats; ++i) {
         const double lat0 = M_PI * (-0.5 + static_cast<double>(i) / lats);
@@ -99,9 +99,14 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
         }
     }
 
+    std::cout << "Buffer size: " << (buffer.size() / sizeof(float)) << std::endl;
+    std::cout << "length: " << (length) << std::endl;
+    std::cout << "1\n" ;
     m_mesh->init(&(buffer[0]), length);
+    std::cout << "2\n";
     m_mesh->bind();
-
+    std::cout << "3" << std::endl;
+    
     // vertices
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, STRIDE_SIZE * sizeof(GLfloat), (GLvoid*)0);
@@ -124,21 +129,21 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
 // {
 // }
 
-void Sphere::Draw()
-{
-    m_mesh->bind();
+// void Sphere::draw()
+// {
+//     m_mesh->bind();
 
-    for (unsigned int i = 0; i < m_lats; ++i)			
-        glDrawArrays(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2 ) , static_cast<GLsizei>(2 * (m_longs + 1)));
+//     for (unsigned int i = 0; i < m_lats; ++i)			
+//         glDrawArrays(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2 ) , static_cast<GLsizei>(2 * (m_longs + 1)));
 
-    //VertexBufferRenderable::UnBind();
-}
+//     //VertexBufferRenderable::UnBind();
+// }
 
-void Sphere::DrawInstanced(unsigned int count)
-{
-    m_mesh->bind();
+// void Sphere::drawInstanced(unsigned int count)
+// {
+//     m_mesh->bind();
 
-    for (unsigned int i = 0; i < m_lats; ++i)
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2), static_cast<GLsizei>(2 * (m_longs + 1)), count);
-}
+//     for (unsigned int i = 0; i < m_lats; ++i)
+//         glDrawArraysInstanced(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2), static_cast<GLsizei>(2 * (m_longs + 1)), count);
+// }
 

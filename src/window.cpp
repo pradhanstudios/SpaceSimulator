@@ -2,7 +2,7 @@
 
 // Constructor
 Window::Window(int width, int height, const char* title)
-	: m_width(width), m_height(height), m_title(title), m_window(nullptr) {
+	: m_window(nullptr), m_width(width), m_height(height), m_title(title)  {
 
 	initGLFW();     // Initialize GLFW
 	createWindow(); // Create the GLFW window

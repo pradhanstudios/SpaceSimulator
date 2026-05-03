@@ -35,7 +35,7 @@ void Sim::init() {
 	m_shader = new Shader(vertexShaderPath, fragmentShaderPath);
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
 
-	m_sphere = new Sphere(); // segfault
+	m_sphere = new Sphere(1.f); // segfault
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
@@ -58,6 +58,7 @@ void Sim::run() {
 	while (!m_window->shouldClose()) {
 		processInput();	// User input
 		update();		// Sim state update
+		std::cout << "[sim.cpp] Render\n";
 		render();       // Draw frame
 
 		m_window->swapBuffers();
@@ -116,5 +117,8 @@ void Sim::update() {
 void Sim::render() {
 	m_renderer->clear();
 
-	// m_renderer->draw(*m_chunk->getMesh(), *m_shader, *m_camera);
+	if (m_sphere != nullptr) {
+
+		m_renderer->draw(m_sphere->getMesh(), m_shader, m_camera); // segfault
+	}
 }

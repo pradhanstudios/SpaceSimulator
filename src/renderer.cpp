@@ -18,15 +18,18 @@ void Renderer::clear() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::draw(const Mesh& mesh, Shader& shader, const Camera& camera) {
-	shader.enable();
-    shader.setm4("projection", glm::value_ptr(camera.getProjection()));
-    shader.setm4("view", glm::value_ptr(camera.getView()));
-	mesh.bind();
-	glDrawArrays(GL_TRIANGLES, 0, mesh.getVertexCount());
-    glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_INT, 0);
-	mesh.unbind();
-	shader.disable();
+void Renderer::draw(Mesh* mesh, Shader* shader, Camera* camera) {
+	shader->enable();
+    shader->setm4("projection", glm::value_ptr(camera->getProjection()));
+    shader->setm4("view", glm::value_ptr(camera->getView()));
+	mesh->bind();
+	std::cout << mesh->getVertexCount() << " vertices to draw.\n";
+	std::cout << mesh->getVAOID() << " VAO ID\n";
+	std::cerr<< "[render.cpp : draw] 5\n";
+	glDrawArrays(GL_TRIANGLES, 0, mesh->getVertexCount());
+	std::cerr<< "[render.cpp : draw] 6\n";
+	// glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_INT, 0); // for indexed drawing
+	shader->disable();
 }
 
 void Renderer::setClearColor(float r, float g, float b, float a) {

@@ -27,7 +27,7 @@ char* readFile(const char* filename) {
 
 	content[bytesRead] = '\0';
 
-	if (bytesRead != fsize) {
+	if (bytesRead != (size_t) fsize) {
 		std::cerr << "WARNING: Mismatch in file size and bytes read for '" << filename << "'\n";
 	}
 

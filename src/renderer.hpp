@@ -4,6 +4,7 @@
 #include "mesh.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
+#include "sphere.hpp"
 #include <GL/glew.h>
 
 class Renderer {
@@ -13,7 +14,7 @@ public:
 
 	void clear();
 
-	void draw(const Mesh& mesh, Shader& shader, const Camera& camera);
+	void draw(Mesh* mesh, Shader* shader, Camera* camera);
 	void setClearColor(float r, float g, float b, float a);
     void toggleWireframeDraw();
 

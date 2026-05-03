@@ -14,8 +14,9 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	size_t getVertexCount() const { return m_vertexCount; }
+	size_t getVertexCount() { return m_vertexCount; }
 	size_t getIndexCount() const { return m_indexCount; }
+    GLuint getVAOID() const { return m_VAO; }
     GLuint getVBOID() const { return m_VBO; }
 
 private:
