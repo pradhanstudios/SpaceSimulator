@@ -100,5 +100,4 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
     }
 
     m_mesh->init(&(buffer[0]), length);
-    m_mesh->bind();
 }
