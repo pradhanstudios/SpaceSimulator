@@ -99,51 +99,6 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
         }
     }
 
-    std::cout << "Buffer size: " << (buffer.size() / sizeof(float)) << std::endl;
-    std::cout << "length: " << (length) << std::endl;
-    std::cout << "1\n" ;
     m_mesh->init(&(buffer[0]), length);
-    std::cout << "2\n";
     m_mesh->bind();
-    std::cout << "3" << std::endl;
-    
-    // vertices
-    // glEnableVertexAttribArray(0);
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, STRIDE_SIZE * sizeof(GLfloat), (GLvoid*)0);
-    //
-    // // normals
-    // glEnableVertexAttribArray(1);
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, STRIDE_SIZE * sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
-    //
-    // // texture coordinates
-    // glEnableVertexAttribArray(2);
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, STRIDE_SIZE * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-    //
-    // // tangent
-    // glEnableVertexAttribArray(3);
-    // glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, STRIDE_SIZE * sizeof(GLfloat), (GLvoid*)(8 * sizeof(GLfloat)));
 }
-
-
-// Sphere::~Sphere()
-// {
-// }
-
-// void Sphere::draw()
-// {
-//     m_mesh->bind();
-
-//     for (unsigned int i = 0; i < m_lats; ++i)			
-//         glDrawArrays(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2 ) , static_cast<GLsizei>(2 * (m_longs + 1)));
-
-//     //VertexBufferRenderable::UnBind();
-// }
-
-// void Sphere::drawInstanced(unsigned int count)
-// {
-//     m_mesh->bind();
-
-//     for (unsigned int i = 0; i < m_lats; ++i)
-//         glDrawArraysInstanced(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (m_longs + 1) * 2), static_cast<GLsizei>(2 * (m_longs + 1)), count);
-// }
-

@@ -58,7 +58,6 @@ void Sim::run() {
 	while (!m_window->shouldClose()) {
 		processInput();	// User input
 		update();		// Sim state update
-		std::cout << "[sim.cpp] Render\n";
 		render();       // Draw frame
 
 		m_window->swapBuffers();
