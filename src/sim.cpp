@@ -11,9 +11,9 @@ Sim::Sim(int fps)
 // Destructor
 Sim::~Sim() {
 	// temp
-	if (m_sphere) {
-		delete m_sphere;
-		m_sphere = nullptr;
+	if (m_body) {
+		delete m_body;
+		m_body = nullptr;
 	}
 
     if (m_shader) {
@@ -41,7 +41,8 @@ void Sim::init() {
 	m_shader = new Shader(vertexShaderPath, fragmentShaderPath);
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
 
-	m_sphere = new Sphere(1.f); // segfault
+	// temp
+	m_body = new Body(1.0f, glm::vec3(0, 0, 0));
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
@@ -122,8 +123,8 @@ void Sim::update() {
 void Sim::render() {
 	m_renderer->clear();
 
-	if (m_sphere != nullptr) {
+	if (m_body != nullptr) {
 
-		m_renderer->draw(m_sphere->getMesh(), m_shader, m_camera); // segfault
+		m_renderer->draw(m_body, m_shader, m_camera); // segfault
 	}
 }

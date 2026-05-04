@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mesh.hpp"
+#include "body.hpp"
 #include "renderer.hpp"
 #include "shader.hpp"
 #include "window.hpp"
@@ -23,11 +24,13 @@ private:
 	Window* m_window;   // Pointer to the Window object
 	Renderer* m_renderer; // Pointer to the Renderer object
 	Shader* m_shader;   // Pointer to the Shader object
-	Sphere* m_sphere;
     Camera* m_camera;
     double m_mousePosX;
     double m_mousePosY;
     uint m_fps;
+
+	// temp
+	Body* m_body;
 
 	// Private helper function to initialize all components
 	void init();

@@ -30,7 +30,7 @@ public:
     }
     
     inline glm::mat4 getViewForPosition(glm::vec3 position) {
-        glm::vec3 offset = position - m_position;
+        glm::vec3 offset = m_position - position;
         return glm::lookAt(m_position + offset, m_position + offset + m_front, m_upAxis);
     }
 
