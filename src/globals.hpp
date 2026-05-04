@@ -11,13 +11,14 @@
 #include <thread>
 
 // Shader
-inline const char *vertexShaderPath = "assets/shader.vert";
-inline const char *fragmentShaderPath = "assets/shader.frag";
+inline const char* vertexShaderPath = "assets/shader.vert";
+inline const char* fragmentShaderPath = "assets/shader.frag";
 
 // Window
 inline int defaultHeight = 720;
 inline int defaultWidth = 1280;
 inline int defaultFPS = 60;
+constexpr int SPHERE_RESOLUTION = 64;
 
 // Camera
 constexpr float cameraDefaultYaw = -90.f;

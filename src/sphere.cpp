@@ -1,26 +1,25 @@
 #include "sphere.hpp"
 
-Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
-    : m_lats(lats), m_longs(longs) {
+Sphere::Sphere(float r) {
     m_mesh = new Mesh();
     std::vector<float> buffer;
     static const int STRIDE_SIZE = 11; // 3 for vertex, 3 for normal, 2 for texture coordinates, 3 for tangent
     static const int STEP_SIZE = 2 * STRIDE_SIZE; // 2 vertices at once
 
-    unsigned int length = (lats + 1) * (longs + 1) * STEP_SIZE;
+    unsigned int length = (SPHERE_RESOLUTION + 1) * (SPHERE_RESOLUTION + 1) * STEP_SIZE;
     buffer.resize(length);
 
-    for (size_t i = 0; i < lats; ++i) {
-        const double lat0 = M_PI * (-0.5 + static_cast<double>(i) / lats);
+    for (size_t i = 0; i < SPHERE_RESOLUTION; ++i) {
+        const double lat0 = M_PI * (-0.5 + static_cast<double>(i) / SPHERE_RESOLUTION);
         const double z0 = r*sin(lat0);
         const double r0 = r*cos(lat0);
 
-        const double lat1 = M_PI * (-0.5 + (i + 1.) / lats);
+        const double lat1 = M_PI * (-0.5 + (i + 1.) / SPHERE_RESOLUTION);
         const double z1 = r*sin(lat1);
         const double r1 = r*cos(lat1);
 
-        for (size_t j = 0; j <= longs; ++j) {
-            const double longitude = 2. * M_PI * static_cast<double>(j) / longs;
+        for (size_t j = 0; j <= SPHERE_RESOLUTION; ++j) {
+            const double longitude = 2. * M_PI * static_cast<double>(j) / SPHERE_RESOLUTION;
 
             const double c = cos(longitude);
             const double s = sin(longitude);
@@ -28,9 +27,9 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
             double x0 = r0 * c;
             double y0 = r0 * s;
 
-            double XTex = static_cast<double>(j) / longs;
-            double YTex0 = static_cast<double>(i) / lats;
-            double YTex1 = (static_cast<double>(i) + 1.) / lats;
+            double XTex = static_cast<double>(j) / SPHERE_RESOLUTION;
+            double YTex0 = static_cast<double>(i) / SPHERE_RESOLUTION;
+            double YTex1 = (static_cast<double>(i) + 1.) / SPHERE_RESOLUTION;
 
             double x1 = r1 * c;
             double y1 = r1 * s;
@@ -38,7 +37,7 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
             // first vertex
 
             // vertex
-            const size_t base = i * (longs + 1ULL) * STEP_SIZE + j * STEP_SIZE;
+            const size_t base = i * (SPHERE_RESOLUTION+ 1ULL) * STEP_SIZE + j * STEP_SIZE;
             buffer[base] = static_cast<float>(x1);
             buffer[base + 1] = static_cast<float>(y1);
             buffer[base + 2] = static_cast<float>(z1);
@@ -56,12 +55,12 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
             
             const glm::vec3 approxBitangent(x1 - x0, y1 - y0, z1 - z0);
             
-            glm::vec3 bitangent = approxBitangent - glm::dot(approxBitangent, normal) * normal; // subtract the projection on the direction of the normal, now it's orthogonal
-            bitangent = glm::normalize(bitangent); // now it's orthonormal
+            glm::vec3 bitangent = approxBitangent - glm::dot(approxBitangent, normal) * normal;
+            bitangent = glm::normalize(bitangent);
 
-            // the other one is simply the cross product
+            
             glm::vec3 tangent = glm::cross(bitangent, normal);
-            tangent = glm::normalize(tangent); // this is not really necessary
+            tangent = glm::normalize(tangent);
 
             // tangent
             buffer[base + 8] = static_cast<float>(tangent.x);
@@ -85,12 +84,12 @@ Sphere::Sphere(float r, unsigned int lats, unsigned int longs)
             buffer[base + STRIDE_SIZE + 7] = static_cast<float>(YTex0);
 
             normal = glm::vec3(buffer[base + STRIDE_SIZE + 3], buffer[base + STRIDE_SIZE + 4], buffer[base + STRIDE_SIZE + 5]);
-            bitangent = approxBitangent - glm::dot(approxBitangent, normal) * normal; // subtract the projection on the direction of the normal, now it's orthogonal
-            bitangent = glm::normalize(bitangent); // now it's orthonormal
+            bitangent = approxBitangent - glm::dot(approxBitangent, normal) * normal;
+            bitangent = glm::normalize(bitangent);
             
-            // the other one is simply the cross product
+            
             tangent = glm::cross(bitangent, normal);
-            tangent = glm::normalize(tangent); // this is not really necessary
+            tangent = glm::normalize(tangent);
 
             // tangent
             buffer[base + STRIDE_SIZE + 8] = static_cast<float>(tangent.x);
