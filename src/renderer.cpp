@@ -23,8 +23,9 @@ void Renderer::draw(Mesh* mesh, Shader* shader, Camera* camera) {
     shader->setm4("projection", glm::value_ptr(camera->getProjection()));
     shader->setm4("view", glm::value_ptr(camera->getView()));
 	mesh->bind();
-	glDrawArrays(GL_TRIANGLES, 0, mesh->getVertexCount());
-	// glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_INT, 0); // for indexed drawing
+    for (int i = 0; i < SPHERE_RESOLUTION; i++)
+        glDrawArrays(GL_TRIANGLE_STRIP, static_cast<GLint>(i * (SPHERE_RESOLUTION + 1) * 2 ) , static_cast<GLsizei>(2 * (SPHERE_RESOLUTION + 1)));
+    // glDrawArrays(GL_TRIANGLES, 0, mesh->getVertexCount());
 	shader->disable();
 }
 

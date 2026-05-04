@@ -27,7 +27,7 @@ void Mesh::init(const float* vertices, size_t numVertices, const uint* indices, 
 	m_VAO = 0;
 	m_VBO = 0;
 	m_EBO = 0;
-	m_vertexCount = numVertices / 11; // Assuming 3 components per vertex (x, y, z)
+	m_vertexCount = numVertices / 11;
 	m_indexCount = numIndices;
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &m_VBO);
