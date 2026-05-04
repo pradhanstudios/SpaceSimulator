@@ -10,6 +10,12 @@ Sim::Sim(int fps)
 
 // Destructor
 Sim::~Sim() {
+	// temp
+	if (m_sphere) {
+		delete m_sphere;
+		m_sphere = nullptr;
+	}
+
     if (m_shader) {
 		delete m_shader;
 		m_shader = nullptr;

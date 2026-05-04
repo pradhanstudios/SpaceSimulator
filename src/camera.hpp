@@ -28,6 +28,11 @@ public:
     inline void updateView() {
         m_view = glm::lookAt(m_position, m_position + m_front, m_upAxis);
     }
+    
+    inline glm::mat4 getViewForPosition(glm::vec3 position) {
+        glm::vec3 offset = position - m_position;
+        return glm::lookAt(m_position + offset, m_position + offset + m_front, m_upAxis);
+    }
 
     inline glm::mat4 getView() const {
         return m_view;
