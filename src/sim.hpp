@@ -30,7 +30,7 @@ private:
     uint m_fps;
 
 	// temp
-	Body* m_body;
+	std::vector<Body*> m_bodyList;
 
 	// Private helper function to initialize all components
 	void init();

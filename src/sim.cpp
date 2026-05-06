@@ -11,9 +11,9 @@ Sim::Sim(int fps)
 // Destructor
 Sim::~Sim() {
 	// temp
-	if (m_body) {
-		delete m_body;
-		m_body = nullptr;
+	for (Body* b : m_bodyList) {
+		delete b;
+		b = nullptr;
 	}
 
     if (m_shader) {
@@ -42,7 +42,10 @@ void Sim::init() {
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
 
 	// temp
-	m_body = new Body(1.0f, glm::vec3(0, 0, 0));
+	m_bodyList = {
+		new Body(1.0f, glm::vec3(0, 0, 0)),
+		new Body(2.0f, glm::vec3(0, 10, 0)),
+	};
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
@@ -123,8 +126,7 @@ void Sim::update() {
 void Sim::render() {
 	m_renderer->clear();
 
-	if (m_body != nullptr) {
-
-		m_renderer->draw(m_body, m_shader, m_camera); // segfault
+	for (Body* b : m_bodyList) {
+		m_renderer->draw(b, m_shader, m_camera);
 	}
 }
