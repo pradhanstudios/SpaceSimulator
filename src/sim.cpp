@@ -121,6 +121,21 @@ void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
 void Sim::update() {
 	// Movement, physics, AI, animation, updates, etc
     m_camera->updateView();
+
+	for (size_t i = 0; i < m_bodyList.size(); i++) {
+		Body* b1 = m_bodyList[i];
+		for (size_t j = i + 1; j < m_bodyList.size(); j++) {
+			Body* b2 = m_bodyList[j];
+
+			glm::vec3 f1 = {0, 0, 0};
+			glm::vec3 f2 = {0, 0, 0};
+
+			calcGravityForceVectors(b1, b2, f1, f2);
+
+			b1->setForce(b1->getForce() + f1);
+			b2->setForce(b2->getForce() + f2);
+		};
+	};
 }
 
 void Sim::render() {

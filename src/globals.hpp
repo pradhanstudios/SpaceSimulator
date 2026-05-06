@@ -27,3 +27,6 @@ constexpr float cameraDefaultSensitivity = 5.f;
 constexpr float cameraDefaultZoom = 30.f;
 constexpr float cameraDefaultFOV = 75.f;
 constexpr float cameraDefaultSpeed = 5.f;
+
+// Physics
+inline const float G = 6.674 * pow(10, -11);// Physics

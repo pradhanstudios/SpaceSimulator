@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "deltaTime.hpp"
 #include "sphere.hpp"
+#include "physics.hpp"
 
 class Sim {
 public:
