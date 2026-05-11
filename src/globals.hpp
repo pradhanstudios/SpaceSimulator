@@ -19,6 +19,7 @@ inline int defaultHeight = 720;
 inline int defaultWidth = 1280;
 inline int defaultFPS = 60;
 constexpr int SPHERE_RESOLUTION = 64;
+inline glm::vec3 backgroundColor = {0.f, 0.f, 0.f};
 
 // Camera
 constexpr float cameraDefaultYaw = -90.f;
