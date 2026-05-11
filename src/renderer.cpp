@@ -4,7 +4,7 @@
 // Constructor
 Renderer::Renderer() {
     m_FillDraw = true;
-	glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
+	glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	std::cout << "Renderer initialized." << std::endl;
 }
