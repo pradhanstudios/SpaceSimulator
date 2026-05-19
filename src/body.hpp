@@ -2,10 +2,11 @@
 #include "globals.hpp"
 #include "sphere.hpp"
 #include "mesh.hpp"
+#include "deltaTime.hpp"
 
 class Body {
 public:
-    Body(float rad, glm::vec3 pos, float mass = 1.0f);
+    Body(float rad, glm::vec3 pos, glm::vec3 vel = glm::vec3(0, 0, 0), float mass = 1.0f);
     ~Body() { delete m_sphere; };
 
     // getters
@@ -30,6 +31,7 @@ public:
     // physics
     void updatePos();
     void updateVel();
+    void updateAcc();
 
 private:
     Sphere* m_sphere;

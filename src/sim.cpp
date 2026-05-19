@@ -43,8 +43,8 @@ void Sim::init() {
 
 	// temp
 	m_bodyList = {
-		new Body(1.0f, glm::vec3(0, 0, 0)),
-		new Body(2.0f, glm::vec3(0, 10, 0)),
+		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 10000),
+		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, -1, 0), 20000),
 	};
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
@@ -122,6 +122,7 @@ void Sim::update() {
 	// Movement, physics, AI, animation, updates, etc
     m_camera->updateView();
 
+	// Force Calc
 	for (size_t i = 0; i < m_bodyList.size(); i++) {
 		Body* b1 = m_bodyList[i];
 		for (size_t j = i + 1; j < m_bodyList.size(); j++) {
@@ -134,8 +135,24 @@ void Sim::update() {
 
 			b1->setForce(b1->getForce() + f1);
 			b2->setForce(b2->getForce() + f2);
+
+			// std::cout << "b1-- p: " << b1->getPos().y << " v: " << b1->getVelocity().y << " a: " << b1->getAcceleration().y << "\t\tb2-- p: " << b2->getPos().y << " v: " << b2->getVelocity().y << " a: " << b2->getAcceleration().y << "\n";
 		};
 	};
+
+	// Update
+	for (size_t i = 0; i < m_bodyList.size(); i++) {
+		Body* b = m_bodyList[i];
+		b->updateAcc();
+		b->updateVel();
+		b->updatePos();
+
+		std::cout << "b[" << i << "]-- p: " << b->getPos().y 
+                  << " v: " << b->getVelocity().y 
+                  << " a: " << b->getAcceleration().y << "\n";
+	}
+
+	
 }
 
 void Sim::render() {
