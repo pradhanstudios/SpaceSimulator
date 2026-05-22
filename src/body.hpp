@@ -1,8 +1,7 @@
 #pragma once
-#include "globals.hpp"
+
 #include "sphere.hpp"
 #include "mesh.hpp"
-#include "deltaTime.hpp"
 
 class Body {
 public:
@@ -32,6 +31,8 @@ public:
     void updatePos();
     void updateVel();
     void updateAcc();
+
+    void calcGravForceVec(Body* other, glm::vec3& outForce1, glm::vec3& outForce2);
 
 private:
     Sphere* m_sphere;

@@ -43,8 +43,8 @@ void Sim::init() {
 
 	// temp
 	m_bodyList = {
-		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 10000),
-		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, -1, 0), 20000),
+		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 0.02, 0), 10000),
+		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, -0.02, 0), 20000),
 	};
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
@@ -63,7 +63,7 @@ void Sim::init() {
 // Main loop
 void Sim::run() {
 	std::cout << "Sim running..." << std::endl;
-    deltaTime = 1 / m_fps;
+    deltaTime = 1.f / m_fps;
     std::this_thread::sleep_for(std::chrono::milliseconds(int(deltaTime * 1000)));
 	while (!m_window->shouldClose()) {
 		processInput();	// User input
@@ -73,7 +73,7 @@ void Sim::run() {
 		m_window->swapBuffers();
 		m_window->pollEvents();
         updateDeltaTime();
-        std::this_thread::sleep_for(std::chrono::milliseconds(std::max(int(1000 / m_fps - deltaTime * 1000), 0)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(std::max(int(1000.f / m_fps - deltaTime * 1000), 0)));
 	}
 	std::cout << "Sim loop finished." << std::endl;
 }
@@ -84,11 +84,11 @@ void Sim::processInput() {
 	}
 
 	if (m_window->isKeyPressed(GLFW_KEY_W)) {
-	    m_camera->setPosition(m_camera->getPosition() + m_camera->getFront() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() + m_camera->getFront() * cameraDefaultSpeed * deltaTime);
 	}
 
 	if (m_window->isKeyPressed(GLFW_KEY_S)) {
-	    m_camera->setPosition(m_camera->getPosition() - m_camera->getFront() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() - m_camera->getFront() * cameraDefaultSpeed * deltaTime);
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_A)) {
@@ -96,7 +96,7 @@ void Sim::processInput() {
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_D)) {
-	    m_camera->setPosition(m_camera->getPosition() + m_camera->getRightAxis() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() + m_camera->getRightAxis() * cameraDefaultSpeed * deltaTime);
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
@@ -114,7 +114,7 @@ void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
     double offsetX = (sim->m_mousePosX - posX) * deltaTime;
     double offsetY = (sim->m_mousePosY - posY) * deltaTime;
     sim->m_mousePosX = posX;
-    sim->m_mousePosY = posY; 
+    sim->m_mousePosY = posY;
     sim->m_camera->processMouse(offsetX, offsetY);
 }
 
@@ -131,7 +131,8 @@ void Sim::update() {
 			glm::vec3 f1 = {0, 0, 0};
 			glm::vec3 f2 = {0, 0, 0};
 
-			calcGravityForceVectors(b1, b2, f1, f2);
+			b1->calcGravForceVec(b2, f1, f2);
+			// calcGravityForceVectors(b1, b2, f1, f2);
 
 			b1->setForce(b1->getForce() + f1);
 			b2->setForce(b2->getForce() + f2);
@@ -147,12 +148,12 @@ void Sim::update() {
 		b->updateVel();
 		b->updatePos();
 
-		std::cout << "b[" << i << "]-- p: " << b->getPos().y 
-                  << " v: " << b->getVelocity().y 
+		std::cout << "b[" << i << "]-- p: " << b->getPos().y
+                  << " v: " << b->getVelocity().y
                   << " a: " << b->getAcceleration().y << "\n";
 	}
 
-	
+
 }
 
 void Sim::render() {
