@@ -11,9 +11,9 @@ Sim::Sim(int fps)
 // Destructor
 Sim::~Sim() {
 	// temp
-	if (m_body) {
-		delete m_body;
-		m_body = nullptr;
+	for (Body* b : m_bodyList) {
+		delete b;
+		b = nullptr;
 	}
 
     if (m_shader) {
@@ -42,7 +42,10 @@ void Sim::init() {
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
 
 	// temp
-	m_body = new Body(1.0f, glm::vec3(0, 0, 0));
+	m_bodyList = {
+		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 0.02, 0), 10000),
+		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, -0.02, 0), 20000),
+	};
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
@@ -60,7 +63,7 @@ void Sim::init() {
 // Main loop
 void Sim::run() {
 	std::cout << "Sim running..." << std::endl;
-    deltaTime = 1 / m_fps;
+    deltaTime = 1.f / m_fps;
     std::this_thread::sleep_for(std::chrono::milliseconds(int(deltaTime * 1000)));
 	while (!m_window->shouldClose()) {
 		processInput();	// User input
@@ -70,7 +73,7 @@ void Sim::run() {
 		m_window->swapBuffers();
 		m_window->pollEvents();
         updateDeltaTime();
-        std::this_thread::sleep_for(std::chrono::milliseconds(std::max(int(1000 / m_fps - deltaTime * 1000), 0)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(std::max(int(1000.f / m_fps - deltaTime * 1000), 0)));
 	}
 	std::cout << "Sim loop finished." << std::endl;
 }
@@ -81,11 +84,11 @@ void Sim::processInput() {
 	}
 
 	if (m_window->isKeyPressed(GLFW_KEY_W)) {
-	    m_camera->setPosition(m_camera->getPosition() + m_camera->getFront() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() + m_camera->getFront() * cameraDefaultSpeed * deltaTime);
 	}
 
 	if (m_window->isKeyPressed(GLFW_KEY_S)) {
-	    m_camera->setPosition(m_camera->getPosition() - m_camera->getFront() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() - m_camera->getFront() * cameraDefaultSpeed * deltaTime);
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_A)) {
@@ -93,7 +96,7 @@ void Sim::processInput() {
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_D)) {
-	    m_camera->setPosition(m_camera->getPosition() + m_camera->getRightAxis() * cameraDefaultSpeed * deltaTime);	
+	    m_camera->setPosition(m_camera->getPosition() + m_camera->getRightAxis() * cameraDefaultSpeed * deltaTime);
 	}
 
     if (m_window->isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
@@ -111,20 +114,52 @@ void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
     double offsetX = (sim->m_mousePosX - posX) * deltaTime;
     double offsetY = (sim->m_mousePosY - posY) * deltaTime;
     sim->m_mousePosX = posX;
-    sim->m_mousePosY = posY; 
+    sim->m_mousePosY = posY;
     sim->m_camera->processMouse(offsetX, offsetY);
 }
 
 void Sim::update() {
 	// Movement, physics, AI, animation, updates, etc
     m_camera->updateView();
+
+	// Force Calc
+	for (size_t i = 0; i < m_bodyList.size(); i++) {
+		Body* b1 = m_bodyList[i];
+		for (size_t j = i + 1; j < m_bodyList.size(); j++) {
+			Body* b2 = m_bodyList[j];
+
+			glm::vec3 f1 = {0, 0, 0};
+			glm::vec3 f2 = {0, 0, 0};
+
+			b1->calcGravForceVec(b2, f1, f2);
+			// calcGravityForceVectors(b1, b2, f1, f2);
+
+			b1->setForce(b1->getForce() + f1);
+			b2->setForce(b2->getForce() + f2);
+
+			// std::cout << "b1-- p: " << b1->getPos().y << " v: " << b1->getVelocity().y << " a: " << b1->getAcceleration().y << "\t\tb2-- p: " << b2->getPos().y << " v: " << b2->getVelocity().y << " a: " << b2->getAcceleration().y << "\n";
+		};
+	};
+
+	// Update
+	for (size_t i = 0; i < m_bodyList.size(); i++) {
+		Body* b = m_bodyList[i];
+		b->updateAcc();
+		b->updateVel();
+		b->updatePos();
+
+		std::cout << "b[" << i << "]-- p: " << b->getPos().y
+                  << " v: " << b->getVelocity().y
+                  << " a: " << b->getAcceleration().y << "\n";
+	}
+
+
 }
 
 void Sim::render() {
 	m_renderer->clear();
 
-	if (m_body != nullptr) {
-
-		m_renderer->draw(m_body, m_shader, m_camera); // segfault
+	for (Body* b : m_bodyList) {
+		m_renderer->draw(b, m_shader, m_camera);
 	}
 }

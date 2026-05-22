@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "deltaTime.hpp"
 #include "sphere.hpp"
+#include "physics.hpp"
 
 class Sim {
 public:
@@ -30,7 +31,7 @@ private:
     uint m_fps;
 
 	// temp
-	Body* m_body;
+	std::vector<Body*> m_bodyList;
 
 	// Private helper function to initialize all components
 	void init();

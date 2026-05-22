@@ -19,6 +19,7 @@ inline int defaultHeight = 720;
 inline int defaultWidth = 1280;
 inline int defaultFPS = 60;
 constexpr int SPHERE_RESOLUTION = 64;
+inline glm::vec3 backgroundColor = {0.f, 0.f, 0.f};
 
 // Camera
 constexpr float cameraDefaultYaw = -90.f;
@@ -27,3 +28,6 @@ constexpr float cameraDefaultSensitivity = 5.f;
 constexpr float cameraDefaultZoom = 30.f;
 constexpr float cameraDefaultFOV = 75.f;
 constexpr float cameraDefaultSpeed = 5.f;
+
+// Physics
+inline const float G = 6.674 * pow(10, -11);// Physics
