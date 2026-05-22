@@ -14,11 +14,11 @@ void Body::updateAcc() {
 }
 
 void Body::updateVel() {
-    this->m_velocity += this->m_acceleration * deltaTime;
+    this->m_velocity += this->m_acceleration * physicsDeltaTime;
 }
 
 void Body::updatePos() {
-    this->m_pos += this->m_velocity * deltaTime;
+    this->m_pos += this->m_velocity * physicsDeltaTime;
 }
 
 void Body::calcGravForceVec(Body* other, glm::vec3& outForce1, glm::vec3& outForce2) {

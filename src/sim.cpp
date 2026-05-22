@@ -43,8 +43,8 @@ void Sim::init() {
 
 	// temp
 	m_bodyList = {
-		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 0.02, 0), 10000),
-		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, -0.02, 0), 20000),
+		new Body(1.0f, glm::vec3(0, 0, 0), glm::vec3(0.03, 0, 0), 1000),
+		new Body(2.0f, glm::vec3(0, 10, 0), glm::vec3(0, 0, 0), 1000000),
 	};
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
