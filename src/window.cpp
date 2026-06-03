@@ -65,3 +65,7 @@ void Window::pollEvents() {
 bool Window::isKeyPressed(int key) const {
 	return glfwGetKey(m_window, key) == GLFW_PRESS;
 }
+
+bool Window::isKeyReleased(int key) const {
+    return glfwGetKey(m_window, key) == GLFW_RELEASE;
+}
