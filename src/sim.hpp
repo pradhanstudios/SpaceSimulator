@@ -29,9 +29,12 @@ private:
     double m_mousePosX;
     double m_mousePosY;
     uint m_fps;
+    int m_cursorMode;
 
 	// temp
 	std::vector<Body*> m_bodyList;
+
+    static void voidMouseCallback(GLFWwindow* window, double posX, double posY) {}
 
 	// Private helper function to initialize all components
 	void init();
@@ -47,4 +50,19 @@ private:
 	// Private helper function to render the scene
 	void render();
 
+    inline void tab_out() {
+        std::cout << "switch\n";
+        if (m_cursorMode == GLFW_CURSOR_DISABLED) {
+            m_cursorMode = GLFW_CURSOR_NORMAL;
+            glfwSetCursorPosCallback(m_window->getGLFWwindow(), voidMouseCallback);
+        }
+
+        else {
+            m_cursorMode = GLFW_CURSOR_DISABLED;
+            // glfwSetCursorPos(m_window->getGLFWwindow(), m_mousePosX, m_mousePosY);
+            glfwSetCursorPosCallback(m_window->getGLFWwindow(), mouseCallback);
+        }
+
+        glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, m_cursorMode);
+    }
 };

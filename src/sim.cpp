@@ -3,7 +3,7 @@
 
 // Constructor
 Sim::Sim(int fps)
-	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps) {
+	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps), m_cursorMode(GLFW_CURSOR_DISABLED) {
 	init();
 	std::cout << "Sim initialized." << std::endl;
 }
@@ -49,7 +49,7 @@ void Sim::init() {
 
     glfwSetWindowUserPointer(m_window->getGLFWwindow(), this);
     glfwSetCursorPos(m_window->getGLFWwindow(), 0, 0);
-    glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, m_cursorMode);
     glfwSetCursorPosCallback(m_window->getGLFWwindow(), mouseCallback);
 
 	if (m_shader->getID() == 0) {
@@ -106,6 +106,14 @@ void Sim::processInput() {
     if (m_window->isKeyPressed(GLFW_KEY_SPACE)) {
         m_camera->setPosition(m_camera->getPosition() + glm::vec3(0.f, 1.f, 0.f) * cameraDefaultSpeed * deltaTime);
     }
+
+    static bool tabLastState = false;
+    bool tabThisState = m_window->isKeyPressed(GLFW_KEY_TAB);
+    if (tabLastState && !tabThisState) {
+        tab_out();
+        glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, m_cursorMode);
+    }
+    tabLastState = tabThisState;
 }
 
 void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
@@ -147,11 +155,8 @@ void Sim::update() {
 		b->updateAcc();
 		b->updateVel();
 		b->updatePos();
-
-		std::cout << "b[" << i << "]-- p: " << b->getPos().y
-                  << " v: " << b->getVelocity().y
-                  << " a: " << b->getAcceleration().y << "\n";
 	}
+    std::cout << m_mousePosX << " " << m_mousePosY << "\n";
 
 
 }
