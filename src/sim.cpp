@@ -3,7 +3,7 @@
 
 // Constructor
 Sim::Sim(int fps)
-	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps), m_cursorMode(GLFW_CURSOR_DISABLED) {
+	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps), m_cursorMode(GLFW_CURSOR_DISABLED), m_firstMouseMove(false) {
 	init();
 	std::cout << "Sim initialized." << std::endl;
 }
@@ -118,6 +118,13 @@ void Sim::processInput() {
 
 void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
     Sim* sim = static_cast<Sim*>(glfwGetWindowUserPointer(window));
+
+    if (sim->m_firstMouseMove) {
+        sim->m_mousePosX = posX;
+        sim->m_mousePosY = posY;
+        sim->m_firstMouseMove = false;
+        return;
+    }
 
     double offsetX = (sim->m_mousePosX - posX) * deltaTime;
     double offsetY = (sim->m_mousePosY - posY) * deltaTime;

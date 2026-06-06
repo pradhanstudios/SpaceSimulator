@@ -30,6 +30,7 @@ private:
     double m_mousePosY;
     uint m_fps;
     int m_cursorMode;
+    bool m_firstMouseMove;
 
 	// temp
 	std::vector<Body*> m_bodyList;
@@ -59,7 +60,7 @@ private:
 
         else {
             m_cursorMode = GLFW_CURSOR_DISABLED;
-            // glfwSetCursorPos(m_window->getGLFWwindow(), m_mousePosX, m_mousePosY);
+            m_firstMouseMove = true;
             glfwSetCursorPosCallback(m_window->getGLFWwindow(), mouseCallback);
         }
 
