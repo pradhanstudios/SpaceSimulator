@@ -52,7 +52,6 @@ private:
 	void render();
 
     inline void tab_out() {
-        std::cout << "switch\n";
         if (m_cursorMode == GLFW_CURSOR_DISABLED) {
             m_cursorMode = GLFW_CURSOR_NORMAL;
             glfwSetCursorPosCallback(m_window->getGLFWwindow(), voidMouseCallback);

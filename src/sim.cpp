@@ -163,9 +163,6 @@ void Sim::update() {
 		b->updateVel();
 		b->updatePos();
 	}
-    std::cout << m_mousePosX << " " << m_mousePosY << "\n";
-
-
 }
 
 void Sim::render() {
