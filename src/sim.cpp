@@ -63,6 +63,8 @@ void Sim::init() {
 // Main loop
 void Sim::run() {
 	std::cout << "Sim running..." << std::endl;
+    // account for setup time
+    _lastFrameTime = glfwGetTime();
     deltaTime = 1.f / m_fps;
     std::this_thread::sleep_for(std::chrono::milliseconds(int(deltaTime * 1000)));
 	while (!m_window->shouldClose()) {
