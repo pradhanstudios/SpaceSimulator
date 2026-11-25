@@ -13,6 +13,9 @@
 // Shader
 inline const char* vertexShaderPath = "assets/shader.vert";
 inline const char* fragmentShaderPath = "assets/shader.frag";
+inline const char* uiVertexShaderPath = "assets/ui.vert";
+inline const char* uiFragmentShaderPath = "assets/ui.frag";
+inline const char* uiFontPath = "assets/fonts/DejaVuSans.ttf";
 
 // Window
 inline int defaultHeight = 720;
@@ -30,4 +33,9 @@ constexpr float cameraDefaultFOV = 75.f;
 constexpr float cameraDefaultSpeed = 5.f;
 
 // Physics
-inline const float G = 6.674 * pow(10, -11);// Physics
+// inline const float G = 6.674 * pow(10, -11);
+inline const float G = 1.f; // Makes gravity stronger just for testing purposes
+
+// Simulation speed = 10^exponent, clamped to [0.01x, 1000x]
+constexpr int minSpeedExponent = -2;
+constexpr int maxSpeedExponent = 3;

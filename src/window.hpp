@@ -10,6 +10,7 @@ public:
 	void swapBuffers();
 	void pollEvents();
 	bool isKeyPressed(int key) const;
+	bool isKeyReleased(int key) const;
 	GLFWwindow* getGLFWwindow() const { return m_window; }
 
 private:
