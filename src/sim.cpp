@@ -3,7 +3,7 @@
 
 // Constructor
 Sim::Sim(int fps)
-	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_fps(fps), m_cursorMode(GLFW_CURSOR_DISABLED), m_firstMouseMove(false) {
+	: m_window(nullptr), m_renderer(nullptr), m_shader(nullptr), m_camera(nullptr), m_ui(nullptr), m_speedExponent(0), m_fps(fps), m_cursorMode(GLFW_CURSOR_DISABLED), m_firstMouseMove(false) {
 	init();
 	std::cout << "Sim initialized." << std::endl;
 }
@@ -19,6 +19,10 @@ Sim::~Sim() {
     if (m_shader) {
 		delete m_shader;
 		m_shader = nullptr;
+	}
+	if (m_ui) { // needs the GL context, so before the window
+		delete m_ui;
+		m_ui = nullptr;
 	}
 	if (m_renderer) {
 		delete m_renderer;
@@ -40,6 +44,7 @@ void Sim::init() {
 	m_renderer = new Renderer();
 	m_shader = new Shader(vertexShaderPath, fragmentShaderPath);
     m_camera = new Camera(glm::vec3(0.f, 0.f, 10.f));
+	m_ui = new UI(m_window->getGLFWwindow());
 
 	// temp
 	m_bodyList = {
@@ -116,6 +121,20 @@ void Sim::processInput() {
         glfwSetInputMode(m_window->getGLFWwindow(), GLFW_CURSOR, m_cursorMode);
     }
     tabLastState = tabThisState;
+
+    // UI clicks (only while the cursor is visible, i.e. after Tab)
+    static bool mouseLastState = false;
+    bool mouseThisState = glfwGetMouseButton(m_window->getGLFWwindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    if (mouseThisState && !mouseLastState && m_cursorMode == GLFW_CURSOR_NORMAL) {
+        double x, y;
+        glfwGetCursorPos(m_window->getGLFWwindow(), &x, &y);
+        switch (m_ui->hitTest(x, y)) {
+            case UIAction::SpeedUp:  m_speedExponent = std::min(m_speedExponent + 1, maxSpeedExponent); break;
+            case UIAction::SlowDown: m_speedExponent = std::max(m_speedExponent - 1, minSpeedExponent); break;
+            case UIAction::None: break;
+        }
+    }
+    mouseLastState = mouseThisState;
 }
 
 void Sim::mouseCallback(GLFWwindow* window, double posX, double posY) {
@@ -139,9 +158,18 @@ void Sim::update() {
 	// Movement, physics, AI, animation, updates, etc
     m_camera->updateView();
 
+    // Speed up by taking more steps, not bigger ones: each substep is at most one
+    // real frame's worth of time, so 10x/100x don't blow up close encounters.
+    float speed = simSpeed();
+    int substeps = std::max(1, int(std::ceil(speed)));
+    physicsDeltaTime = deltaTime * speed / substeps;
+    for (int s = 0; s < substeps; s++)
+        stepPhysics();
+}
+
+void Sim::stepPhysics() {
     // Zero forces
-    for (size_t i = 0; i < m_bodyList.size(); i++)
-        m_bodyList[i]->setForce(glm::vec3(0.f));
+    for (size_t i = 0; i < m_bodyList.size(); i++) m_bodyList[i]->setForce(glm::vec3(0.f));
     
 	// Force Calc
 	for (size_t i = 0; i < m_bodyList.size(); i++) {
@@ -177,4 +205,6 @@ void Sim::render() {
 	for (Body* b : m_bodyList) {
 		m_renderer->draw(b, m_shader, m_camera);
 	}
+
+	m_ui->render(simSpeed(), m_cursorMode == GLFW_CURSOR_NORMAL);
 }

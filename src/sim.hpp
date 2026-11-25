@@ -9,6 +9,8 @@
 #include "deltaTime.hpp"
 #include "sphere.hpp"
 #include "physics.hpp"
+#include "ui.hpp"
+#include <cmath>
 
 class Sim {
 public:
@@ -26,6 +28,8 @@ private:
 	Renderer* m_renderer; // Pointer to the Renderer object
 	Shader* m_shader;   // Pointer to the Shader object
     Camera* m_camera;
+    UI* m_ui;
+    int m_speedExponent; // sim speed = 10^m_speedExponent
     double m_mousePosX;
     double m_mousePosY;
     uint m_fps;
@@ -35,7 +39,7 @@ private:
 	// temp
 	std::vector<Body*> m_bodyList;
 
-    static void voidMouseCallback(GLFWwindow* window, double posX, double posY) {}
+    static void voidMouseCallback(GLFWwindow*, double, double) {}
 
 	// Private helper function to initialize all components
 	void init();
@@ -47,6 +51,11 @@ private:
 
 	// Private helper function to update Sim state (empty for now)
 	void update();
+
+	// One physics step of size physicsDeltaTime
+	void stepPhysics();
+
+	inline float simSpeed() const { return std::pow(10.f, float(m_speedExponent)); }
 
 	// Private helper function to render the scene
 	void render();
