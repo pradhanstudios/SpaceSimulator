@@ -2,10 +2,12 @@
 #include "physics.hpp"
 #include "deltaTime.hpp"
 
-Body::Body(float rad, glm::vec3 pos, glm::vec3 vel, float mass) : m_pos(pos),  m_mass(mass), m_velocity(vel) {
+Body::Body(float rad, glm::vec3 pos, glm::vec3 vel, float mass, bool withMesh)
+    : m_sphere(nullptr), m_radius(rad), m_pos(pos), m_mass(mass), m_velocity(vel) {
     m_acceleration = glm::vec3(0, 0, 0);
     m_force = glm::vec3(0, 0, 0);
-    m_sphere = new Sphere(rad);
+    m_momentum = glm::vec3(0, 0, 0);
+    if (withMesh) m_sphere = new Sphere(rad);
 }
 
 void Body::updateAcc() {
