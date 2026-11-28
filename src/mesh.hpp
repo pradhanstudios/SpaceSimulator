@@ -6,7 +6,7 @@
 
 class Mesh {
 public:
-	Mesh() {  };
+	Mesh() : m_VAO(0), m_VBO(0), m_EBO(0), m_vertexCount(0), m_indexCount(0) {};
 	Mesh(const float* vertices, size_t numVertices, const uint* indices=nullptr, size_t numIndices=0);
 	~Mesh();
 
