@@ -1,0 +1,8 @@
+-xc++
+-std=c++17
+-Wall
+-Wextra
+-Isrc
+-Itests
+-I/usr/include/glm
+-I/usr/include/freetype2
