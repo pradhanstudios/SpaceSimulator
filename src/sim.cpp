@@ -129,8 +129,8 @@ void Sim::processInput() {
         double x, y;
         glfwGetCursorPos(m_window->getGLFWwindow(), &x, &y);
         switch (m_ui->hitTest(x, y)) {
-            case UIAction::SpeedUp:  m_speedExponent = std::min(m_speedExponent + 1, maxSpeedExponent); break;
-            case UIAction::SlowDown: m_speedExponent = std::max(m_speedExponent - 1, minSpeedExponent); break;
+            case UIAction::SpeedUp:  m_speedExponent = clampSpeedExponent(m_speedExponent + 1); break;
+            case UIAction::SlowDown: m_speedExponent = clampSpeedExponent(m_speedExponent - 1); break;
             case UIAction::None: break;
         }
     }
@@ -161,42 +161,10 @@ void Sim::update() {
     // Speed up by taking more steps, not bigger ones: each substep is at most one
     // real frame's worth of time, so 10x/100x don't blow up close encounters.
     float speed = simSpeed();
-    int substeps = std::max(1, int(std::ceil(speed)));
+    int substeps = substepsFor(speed);
     physicsDeltaTime = deltaTime * speed / substeps;
     for (int s = 0; s < substeps; s++)
-        stepPhysics();
-}
-
-void Sim::stepPhysics() {
-    // Zero forces
-    for (size_t i = 0; i < m_bodyList.size(); i++) m_bodyList[i]->setForce(glm::vec3(0.f));
-    
-	// Force Calc
-	for (size_t i = 0; i < m_bodyList.size(); i++) {
-		Body* b1 = m_bodyList[i];
-		for (size_t j = i + 1; j < m_bodyList.size(); j++) {
-			Body* b2 = m_bodyList[j];
-
-			glm::vec3 f1 = {0, 0, 0};
-			glm::vec3 f2 = {0, 0, 0};
-
-			b1->calcGravForceVec(b2, f1, f2);
-			// calcGravityForceVectors(b1, b2, f1, f2);
-
-			b1->setForce(b1->getForce() + f1);
-			b2->setForce(b2->getForce() + f2);
-
-		// std::cout << "b1-- p: " << b1->getPos().y << " v: " << b1->getVelocity().y << " a: " << b1->getAcceleration().y << "\t\tb2-- p: " << b2->getPos().y << " v: " << b2->getVelocity().y << " a: " << b2->getAcceleration().y << "\n";
-		};
-	};
-
-	// Update
-	for (size_t i = 0; i < m_bodyList.size(); i++) {
-		Body* b = m_bodyList[i];
-		b->updateAcc();
-		b->updateVel();
-		b->updatePos();
-	}
+        stepPhysics(m_bodyList);
 }
 
 void Sim::render() {

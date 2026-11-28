@@ -52,9 +52,6 @@ private:
 	// Private helper function to update Sim state (empty for now)
 	void update();
 
-	// One physics step of size physicsDeltaTime
-	void stepPhysics();
-
 	inline float simSpeed() const { return std::pow(10.f, float(m_speedExponent)); }
 
 	// Private helper function to render the scene
