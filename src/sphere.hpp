@@ -3,6 +3,8 @@
 #include "globals.hpp"
 #include "mesh.hpp"
 
+std::vector<float> generateSphereVertices(float r);
+
 class Sphere {
 private:
     Mesh* m_mesh;

@@ -1,7 +1,6 @@
 #include "sphere.hpp"
 
-Sphere::Sphere(float r) : m_radius(r) {
-    m_mesh = new Mesh();
+Sphere::Sphere(float r) : m_mesh(nullptr), m_radius(r) {
     this->setRadius(r);
 }
 
@@ -12,6 +11,11 @@ void Sphere::setRadius(float r) {
     }
     m_mesh = new Mesh();
     m_radius = r;
+    std::vector<float> buffer = generateSphereVertices(r);
+    m_mesh->init(buffer.data(), buffer.size());
+}
+
+std::vector<float> generateSphereVertices(float r) {
     std::vector<float> buffer;
     static const int STRIDE_SIZE = 11; // 3 for vertex, 3 for normal, 2 for texture coordinates, 3 for tangent
     static const int STEP_SIZE = 2 * STRIDE_SIZE; // 2 vertices at once
@@ -108,5 +112,5 @@ void Sphere::setRadius(float r) {
         }
     }
 
-    m_mesh->init(&(buffer[0]), length);
+    return buffer;
 }
