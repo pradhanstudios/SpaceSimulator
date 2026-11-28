@@ -90,25 +90,29 @@ void UI::loadFont(const char* path, int pixelSize) {
 }
 
 // Layout: [speed label] above [10x] above [0.1x], anchored top-right
-float UI::columnX() const {
-    int w, h;
-    glfwGetWindowSize(m_window, &w, &h);
-    return w - UI_MARGIN - UI_BUTTON_WIDTH;
+Rect speedUpRectFor(int windowWidth) {
+    return {windowWidth - UI_MARGIN - UI_BUTTON_WIDTH, UI_MARGIN + UI_LABEL_HEIGHT + UI_SPACING, UI_BUTTON_WIDTH, UI_BUTTON_HEIGHT};
 }
 
-Rect UI::speedUpRect() const {
-    return {columnX(), UI_MARGIN + UI_LABEL_HEIGHT + UI_SPACING, UI_BUTTON_WIDTH, UI_BUTTON_HEIGHT};
-}
-
-Rect UI::slowDownRect() const {
-    Rect up = speedUpRect();
+Rect slowDownRectFor(int windowWidth) {
+    Rect up = speedUpRectFor(windowWidth);
     return {up.x, up.y + up.h + UI_SPACING, UI_BUTTON_WIDTH, UI_BUTTON_HEIGHT};
 }
 
-UIAction UI::hitTest(double x, double y) const {
-    if (speedUpRect().contains(x, y)) return UIAction::SpeedUp;
-    if (slowDownRect().contains(x, y)) return UIAction::SlowDown;
+UIAction hitTestFor(int windowWidth, double x, double y) {
+    if (speedUpRectFor(windowWidth).contains(x, y)) return UIAction::SpeedUp;
+    if (slowDownRectFor(windowWidth).contains(x, y)) return UIAction::SlowDown;
     return UIAction::None;
+}
+
+int UI::windowWidth() const {
+    int w, h;
+    glfwGetWindowSize(m_window, &w, &h);
+    return w;
+}
+
+UIAction UI::hitTest(double x, double y) const {
+    return hitTestFor(windowWidth(), x, y);
 }
 
 void UI::render(float simSpeed, bool cursorVisible) {
@@ -131,8 +135,8 @@ void UI::render(float simSpeed, bool cursorVisible) {
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 
-    Rect up = speedUpRect();
-    Rect down = slowDownRect();
+    Rect up = speedUpRectFor(w);
+    Rect down = slowDownRectFor(w);
     Rect label = {up.x, UI_MARGIN, UI_BUTTON_WIDTH, UI_LABEL_HEIGHT};
 
     drawRect(up, up.contains(mx, my) ? UI_BUTTON_HOVER_COLOR : UI_BUTTON_COLOR);

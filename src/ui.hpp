@@ -13,6 +13,10 @@ struct Rect {
     }
 };
 
+Rect speedUpRectFor(int windowWidth);
+Rect slowDownRectFor(int windowWidth);
+UIAction hitTestFor(int windowWidth, double x, double y);
+
 // Screen-space overlay: simulation speed readout + 10x / 0.1x buttons (top-right corner).
 // Coordinates are window pixels with the origin at the top-left, matching glfwGetCursorPos.
 class UI {
@@ -25,6 +29,8 @@ public:
 
     // Which button (if any) is at the given cursor position.
     UIAction hitTest(double x, double y) const;
+
+    inline bool isFontLoaded() const { return m_fontLoaded; }
 
 private:
     struct Glyph {
@@ -42,9 +48,7 @@ private:
 
     void loadFont(const char* path, int pixelSize);
 
-    Rect speedUpRect() const;
-    Rect slowDownRect() const;
-    float columnX() const;
+    int windowWidth() const;
 
     void drawQuad(float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1);
     void drawRect(const Rect& r, const glm::vec4& color);
